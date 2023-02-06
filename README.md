@@ -5,9 +5,9 @@ With this script you can aggregate raw binance tick data into ohlc, the resample
 
 - To aggregate data please: 
 
-1. make
-2. download raw tick data from: https://data.binance.vision/
-3. execute passing this parameters: ./main input_file_name output_file_name.csv resample_frequency
+   1. make
+   2. download raw tick data from: https://data.binance.vision/
+   3. execute passing this parameters: ./main input_file_name output_file_name.csv resample_frequency
 
 ***this script is still being tested so bugs are possible, please report them if you find some***
 
