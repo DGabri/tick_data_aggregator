@@ -4,7 +4,7 @@
 // write a kline candle to file: open_ts, close_ts, open, high, low, close,
 // buy_vol_usdt, sell_vol_usdt, buy_trades, sell_trades
 int write_kline(Kline *data, FILE *output_file) {
-  int ret = fprintf(output_file, "%ld,%ld,%f,%f,%f,%f,%f,%f,%d,%d\n",
+  int ret = fprintf(output_file, "%ld,%ld,%.8f,%.8f,%.8f,%.8f,%f,%f,%d,%d\n",
                     data->open_ts, data->close_ts, data->open, data->high,
                     data->low, data->close, data->buy_vol_usdt,
                     data->sell_vol_usdt, data->buy_trades, data->sell_trades);
@@ -23,7 +23,7 @@ int write_header(FILE *output_file) {
 void print_candle(Kline *candle) {
   printf("OPEN_TS       CLOSE_TS      OPEN      HIGH      LOW       CLOSE     "
          "BUY_VOL        SELL_VOL\n");
-  printf("%ld %ld %f %f %f %f %f %f\n", candle->open_ts, candle->close_ts,
+  printf("%ld %ld %lf %lf %lf %lf %lf %lf\n", candle->open_ts, candle->close_ts,
          candle->open, candle->high, candle->low, candle->close,
          candle->buy_vol_usdt, candle->sell_vol_usdt);
   printf("-----------------------------------------------------\n");
@@ -38,7 +38,7 @@ unsigned long next_timestamp(unsigned long timestamp, unsigned int seconds) {
 
 int aggregate(FILE *input_file, FILE *output_file, int resample_frequency) {
   // csv line trade data
-  float price = 0;
+  long double price = 0;
   float qty = 0;
   float quote_qty = 0;
   long ts = 0;
@@ -59,6 +59,7 @@ int aggregate(FILE *input_file, FILE *output_file, int resample_frequency) {
   int column = 0;
 
   while (fgets(buffer, 2048, input_file)) {
+    // printf("%s\n", buffer);
     column = 0;
     row++;
     // read data is the csv header
@@ -79,7 +80,7 @@ int aggregate(FILE *input_file, FILE *output_file, int resample_frequency) {
       // get the csv_lines of each csv column
       // price column
       if (column == 1) {
-        price = atof(csv_line);
+        sscanf(csv_line, "%Lf", &price);
       }
       // qty column
       if (column == 2) {
@@ -119,7 +120,8 @@ int aggregate(FILE *input_file, FILE *output_file, int resample_frequency) {
       if (ts > (candle->close_ts)) {
         candle->close = price;
         // write to file
-        if (write_kline(candle, output_file) < 0) {
+        int write_code = write_kline(candle, output_file);
+        if (write_code < 0) {
           printf("Error writing new line, exiting...");
           free(candle);
           free(input_file);

@@ -13,10 +13,10 @@
 typedef struct kline {
     unsigned long open_ts;
     unsigned long close_ts;
-    float open;
-    float high;
-    float low;
-    float close;
+    double open;
+    double high;
+    double low;
+    double close;
     float buy_vol_usdt;
     float sell_vol_usdt;
     int buy_trades;
