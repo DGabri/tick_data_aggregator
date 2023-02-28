@@ -1,5 +1,6 @@
 #include "aggregator.h"
 #include <string.h>
+#include <time.h>
 
 // write a kline candle to file: open_ts, close_ts, open, high, low, close,
 // buy_vol_usdt, sell_vol_usdt, buy_trades, sell_trades
@@ -31,9 +32,18 @@ void print_candle(Kline *candle) {
 
 // function to calculate closing timestamp based on sampling frequency specified
 // and current open time
-unsigned long next_timestamp(unsigned long timestamp, unsigned int seconds) {
-  return ((timestamp + (seconds * 1000) - 1) / (seconds * 1000)) *
-         (seconds * 1000);
+double next_ts(double ts, int freq) {
+  time_t sec = (time_t)ts;
+  double msec = ts - (double)sec;
+  struct tm *tm = localtime(&sec);
+  int seconds = tm->tm_sec + (tm->tm_min * 60) + (tm->tm_hour * 3600);
+  int remainder = seconds % freq;
+  double elapsed = freq - (double)remainder - msec;
+  if (elapsed < 0) {
+    elapsed += freq;
+  }
+  double next_ts = ts + elapsed - msec;
+  return next_ts;
 }
 
 int aggregate(FILE *input_file, FILE *output_file, int resample_frequency) {
@@ -49,8 +59,6 @@ int aggregate(FILE *input_file, FILE *output_file, int resample_frequency) {
   if (candle == NULL) {
     printf("cant't allocate kline");
     free(candle);
-    free(input_file);
-    free(output_file);
     return (-1);
   }
 
@@ -67,8 +75,6 @@ int aggregate(FILE *input_file, FILE *output_file, int resample_frequency) {
       if (write_header(output_file) < 0) {
         printf("Error writing header, exiting...");
         free(candle);
-        free(input_file);
-        free(output_file);
         return (-1);
       }
     }
@@ -124,8 +130,6 @@ int aggregate(FILE *input_file, FILE *output_file, int resample_frequency) {
         if (write_code < 0) {
           printf("Error writing new line, exiting...");
           free(candle);
-          free(input_file);
-          free(output_file);
           return (-1);
         }
         // reset candle struct
