@@ -1,13 +1,17 @@
 # Tick Data Aggregator
 
-2
-With this script you can aggregate raw binance tick data into ohlc, the resample frequency needs to be passed in number of seconds.
+This repo is useful if you want to aggregate raw tick data into candlesticks of your provided frequency i.e. 60 sec etc.
+The provided scripts are working on binance and bybit tick data.
+
+You can find my article about these scripts on my medium: https://medium.com/@gabriele.deri/maximizing-trading-potential-how-to-convert-raw-tick-data-to-ohlc-candles-with-buy-and-sell-volume-46558cdcf94a
 
 - To aggregate data please: 
 
    1. make
-   2. download raw tick data from: https://data.binance.vision/
-   3. execute passing this parameters: ./main input_file_name output_file_name.csv resample_frequency
+   2. download raw tick data from: 
+      - Binance: https://data.binance.vision/ 
+      - Bibit: https://public.bybit.com/trading/ 
+   3. execute main.c with these parameters: ./main tick_data_filename output_file_name.csv resample_frequency
 
 ***this script is still being tested so bugs are possible, please report them if you find some***
 
