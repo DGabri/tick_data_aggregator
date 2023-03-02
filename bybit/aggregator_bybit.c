@@ -97,13 +97,10 @@ int aggregate(FILE *input_file, FILE *output_file, int resample_frequency) {
       // trade timestamp
       if (column == 0) {
         ts = atoi(csv_line);
-        // printf("%ld\n", ts);
       }
       // trade side
       if (column == 2) {
         int len = strlen(csv_line);
-        // printf("LEN: %d\n", len);
-        // printf("SIDE: %s\n", csv_line);
         //  Buy (len = 3) => order is market buy
         //  Sell (len = 4) => order is market sell
         if (len == 3) {
@@ -115,22 +112,18 @@ int aggregate(FILE *input_file, FILE *output_file, int resample_frequency) {
       // qty column
       if (column == 3) {
         qty = atof(csv_line);
-        // printf("QTY: %f\n", qty);
       }
       // price column
       if (column == 4) {
         sscanf(csv_line, "%Lf", &price);
-        // printf("PRICE: %Lf\n", price);
       }
       // tick column
       if (column == 5) {
         char *tick = csv_line;
-        // printf("PRICE: %s\n", tick);
       }
       // quote qty column
       if (column == 9) {
         quote_qty = atof(csv_line);
-        // printf("QUOTE: %f\n", quote_qty);
       }
 
       csv_line = strtok(NULL, ",");
@@ -146,7 +139,6 @@ int aggregate(FILE *input_file, FILE *output_file, int resample_frequency) {
         candle->open = price;
       }
 
-      // puts("===========");
       if (ts > (candle->close_ts)) {
         candle->close = price;
         // write to file
@@ -188,8 +180,7 @@ int aggregate(FILE *input_file, FILE *output_file, int resample_frequency) {
       }
     }
   }
-  printf("ROWS: %d\n", row);
-  free(candle);
 
+  free(candle);
   return (1);
 }
