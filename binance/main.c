@@ -1,4 +1,4 @@
-#include "aggregator.c"
+#include "aggregator_binance.c"
 
 int main(int argc, char **argv) {
 
@@ -20,18 +20,12 @@ int main(int argc, char **argv) {
     printf("Can't open input file: %s\n", in_file);
     return (-1);
   }
-  else {
-    printf("Dataset loaded...\n");
-  }
 
   if (output == NULL) {
     printf("Can't create output file: %s\n", out_file);
     return (-1);
   }
-  else {
-    printf("Output file created...\n");
-  }
-  
+
   aggregate(input, output, frequency);
 
   fclose(input);
