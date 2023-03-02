@@ -1,4 +1,4 @@
-main: main.c aggregator.c aggregator.h
+main: main.c aggregator_binance.c aggregator_binance.h
 	clang main.c -o main 
 
 clean:
