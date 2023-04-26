@@ -21,6 +21,11 @@ typedef struct kline {
     float sell_vol_usdt;
     int buy_trades;
     int sell_trades;
+    float one_k_delta;
+    float ten_k_delta;
+    float hundred_k_delta;
+    float one_m_delta;
+    float ten_m_delta;
 } Kline;
 
 // write a kline candle to file: open_ts, close_ts, open, high, low, close, buy_vol_usdt, sell_vol_usdt, buy_trades, sell_trades
@@ -33,7 +38,7 @@ int write_header(FILE *output_file);
 void print_candle(Kline *candle);
 
 // function to calculate closing timestamp based on sampling frequency specified and current open time
-double next_ts(double ts, int freq);
+unsigned long long  next_ts(unsigned long long timestamp, int freq);
 
 // function to aggregate raw tick data
 int aggregate(FILE *input_file, FILE *output_file, int resample_frequency);
