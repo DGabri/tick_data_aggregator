@@ -33,7 +33,7 @@ int write_header(FILE *output_file);
 void print_candle(Kline *candle);
 
 // function to calculate closing timestamp based on sampling frequency specified and current open time
-double next_ts(double ts, int freq);
+unsigned long long next_ts(unsigned long long timestamp, int freq);
 
 // function to aggregate raw tick data
 int aggregate(FILE *input_file, FILE *output_file, int resample_frequency);

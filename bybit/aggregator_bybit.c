@@ -32,18 +32,13 @@ void print_candle(Kline *candle) {
 
 // function to calculate closing timestamp based on sampling frequency specified
 // and current open time
-double next_ts(double ts, int freq) {
-  time_t sec = (time_t)ts;
-  double msec = ts - (double)sec;
-  struct tm *tm = localtime(&sec);
-  int seconds = tm->tm_sec + (tm->tm_min * 60) + (tm->tm_hour * 3600);
-  int remainder = seconds % freq;
-  double elapsed = freq - (double)remainder - msec;
-  if (elapsed < 0) {
-    elapsed += freq;
+unsigned long long next_ts(unsigned long long timestamp, int freq) {
+  unsigned long long rounded_timestamp =
+      (timestamp / (freq * 1000)) * (freq * 1000);
+  if (timestamp % (freq * 1000) > 0) {
+    rounded_timestamp += freq * 1000;
   }
-  double next_ts = ts + elapsed - msec;
-  return next_ts;
+  return rounded_timestamp;
 }
 
 int aggregate(FILE *input_file, FILE *output_file, int resample_frequency) {
