@@ -110,11 +110,12 @@ int aggregate(FILE *input_file, FILE *output_file, int resample_frequency) {
       // trade side
       if (column == 4) {
         int len = strlen(csv_line);
+
         // false (len = 6) => order is market buy
         // true (len = 5) => order is market sell
-        if (len == 5) {
+        if (len == 6) {
           side = 1;
-        } else if (len == 4) {
+        } else if (len == 5) {
           side = -1;
         }
       }
@@ -174,6 +175,8 @@ int aggregate(FILE *input_file, FILE *output_file, int resample_frequency) {
         candle->buy_vol_usdt += quote_qty;
         candle->buy_trades += 1;
       }
+
+      // print_candle(candle);
 
       // volume delta
 
